@@ -1,0 +1,1 @@
+Projeto criado para ter um desafio de não utilizar a IDE do Delphi e ver o que acontece :);
