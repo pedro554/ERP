@@ -22,6 +22,9 @@ type
     private
         MainMenu: TMainMenu;
         MenuCadastros: TMenuItem;
+        MenuCadastroEmpresa: TMenuItem;
+        MenuCadastroFilial: TMenuItem;
+        MenuCadastroCliente: TMenuItem;
 
         function CriaMenuItem(ACaption: String): TMenuItem;
     public
@@ -33,17 +36,26 @@ implementation
 
 constructor TMenuPrincipalView.Create(AOwner: TComponent);
 begin
-  inherited CreateNew(AOwner);
-  Self.Caption := 'Menu Principal';
-  Self.WindowState := wsMaximized;
+    inherited CreateNew(AOwner);
+    Self.Caption := 'Menu Principal';
+    Self.WindowState := wsMaximized;
 
-  MainMenu := TMainMenu.Create(Self);
-  
-  MenuCadastros := CriaMenuItem('Cadastros');
+    MainMenu := TMainMenu.Create(Self);
 
-  MainMenu.Items.Add(MenuCadastros);
+    MenuCadastros := CriaMenuItem('Cadastros');
 
-  Self.Menu := MainMenu;
+    MenuCadastroEmpresa := CriaMenuItem('Empresas');
+    MenuCadastroFilial := CriaMenuItem('Filiais');
+    MenuCadastroCliente := CriaMenuItem('Clientes');
+
+    MenuCadastros.Add(MenuCadastroEmpresa);
+    MenuCadastros.Add(MenuCadastroFilial);
+    MenuCadastros.Add(CriaMenuItem('-'));
+    MenuCadastros.Add(MenuCadastroCliente);
+
+    MainMenu.Items.Add(MenuCadastros);
+
+    Self.Menu := MainMenu;
 end;
 
 destructor TMenuPrincipalView.Destroy;
