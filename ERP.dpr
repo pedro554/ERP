@@ -17,11 +17,14 @@ uses
   Usuario.Model in 'src\model\Usuario.Model.pas',
   Empresa.Model in 'src\model\Empresa.Model.pas',
 
+  // Mappers
+  Usuario.Mapper in 'src\mapper\Usuario.Mapper.pas',
+  Empresa.Mapper in 'src\mapper\Empresa.Mapper.pas',
+
   Login.View in 'src\view\Login.View.pas',
   Conexao in 'src\config\Conexao.pas',
   Login.Service in 'src\service\Login.Service.pas',
   Session in 'src\config\Session.pas',
-  Usuario.Mapper in 'src\mapper\Usuario.Mapper.pas',
   Login.Repository in 'src\repository\Login.Repository.pas',
   Utils in 'src\common\Utils.pas',
   MenuPrincipal.View in 'src\view\MenuPrincipal.View.pas',
