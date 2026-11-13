@@ -39,13 +39,15 @@ implementation
 constructor TMenuPrincipalView.Create(AOwner: TComponent);
 begin
     inherited CreateNew(AOwner);
+    // configura a tela
     Self.Caption := 'Menu Principal';
     Self.WindowState := wsMaximized;
 
+    // adiciona os menus
     MainMenu := TMainMenu.Create(Self);
 
+    // menu cadastros
     MenuCadastros := CriaMenuItem('Cadastros');
-
     MenuCadastroEmpresa := CriaMenuItem('Empresas');
     MenuCadastroFilial := CriaMenuItem('Filiais');
     MenuCadastroCliente := CriaMenuItem('Clientes');
@@ -55,9 +57,11 @@ begin
     MenuCadastros.Add(CriaMenuItem('-'));
     MenuCadastros.Add(MenuCadastroCliente);
 
+    // menu sair
     MenuSair := CriaMenuItem('Sair');
     MenuSair.OnClick := MenuSairClick;
 
+    // adiciona os itens ao menu
     MainMenu.Items.Add(MenuCadastros);
     MainMenu.Items.Add(MenuSair);
 
