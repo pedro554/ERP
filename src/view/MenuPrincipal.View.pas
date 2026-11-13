@@ -15,7 +15,8 @@ uses
     Session,
     MyEdit,
     MyLabel,
-    Vcl.Menus;
+    Vcl.Menus,
+    CadEmpresa.View;
 
 type
 	TMenuPrincipalView = class(TForm)
@@ -29,6 +30,7 @@ type
 
         function CriaMenuItem(ACaption: String): TMenuItem;
         procedure MenuSairClick(Sender: TObject);
+        procedure MenuCadastroEmpresaClick(Sender: TObject);
     public
         constructor Create(AOwner: TComponent); override;
         destructor Destroy; override;
@@ -49,6 +51,7 @@ begin
     // menu cadastros
     MenuCadastros := CriaMenuItem('Cadastros');
     MenuCadastroEmpresa := CriaMenuItem('Empresas');
+    MenuCadastroEmpresa.OnClick := MenuCadastroEmpresaClick;
     MenuCadastroFilial := CriaMenuItem('Filiais');
     MenuCadastroCliente := CriaMenuItem('Clientes');
 
@@ -82,6 +85,18 @@ end;
 procedure TMenuPrincipalView.MenuSairClick(Sender: TObject);
 begin
   ModalResult := mrCancel;
+end;
+
+procedure TMenuPrincipalView.MenuCadastroEmpresaClick(Sender: TObject);
+var
+    LCadEmpresaView: TCadEmpresaView;
+begin
+    LCadEmpresaView := TCadEmpresaView.Create(nil);
+    try
+      LCadEmpresaView.ShowModal;
+    finally
+      FreeAndNil(LCadEmpresaView);
+    end;
 end;
 
 end.
