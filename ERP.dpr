@@ -13,10 +13,13 @@ uses
   MyPanel in 'src\components\MyPanel.pas',
   MyButton in 'src\components\MyButton.pas',
 
+  // Models
+  Usuario.Model in 'src\model\Usuario.Model.pas',
+  Empresa.Model in 'src\model\Empresa.Model.pas',
+
   Login.View in 'src\view\Login.View.pas',
   Conexao in 'src\config\Conexao.pas',
   Login.Service in 'src\service\Login.Service.pas',
-  Usuario.Model in 'src\model\Usuario.Model.pas',
   Session in 'src\config\Session.pas',
   Usuario.Mapper in 'src\mapper\Usuario.Mapper.pas',
   Login.Repository in 'src\repository\Login.Repository.pas',
