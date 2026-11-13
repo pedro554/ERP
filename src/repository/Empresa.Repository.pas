@@ -5,7 +5,8 @@ interface
 uses
 	System.Generics.Collections,
 	FireDAC.Comp.Client,
-	Empresa.Model;
+	Empresa.Model,
+    Empresa.Mapper;
 
 type
 	TEmpresaRepository = class
@@ -17,7 +18,6 @@ type
 		function BuscarPorId(AId: Integer): TEmpresa;
 		function Listar: TObjectList<TEmpresa>;
 		procedure Gravar(const AEmpresa: TEmpresa);
-		procedure Atualizar(const AEmpresa: TEmpresa);
 		procedure Excluir(AId: Integer);
 	end;
 
@@ -36,30 +36,83 @@ begin
 end;
 
 function TEmpresaRepository.BuscarPorId(AId: Integer): TEmpresa;
+var
+    Q: TFDQuery;
 begin
-	// TODO: consultar e mapear a empresa correspondente.
-	Result := nil;
+    Result := nil;
+
+    Q := TFDQuery.Create(nil);
+    Q.Connection := FConnection;
+    try
+      Q.Open('SELECT FIRST 1 * FROM EMPRESA WHERE CD_EMPRESA = :C', [AId]);
+
+      if Q.IsEmpty then Exit;
+
+      Result := TEmpresaModel.Create;
+      TEmpresaMapper.FromDataSet(Q, Result);
+    finally
+      FreeAndNil(Q);
+    end;
 end;
 
 function TEmpresaRepository.Listar: TObjectList<TEmpresa>;
+var
+    Q: TFDQuery;
+    E: TEmpresaModel;
 begin
-	// TODO: consultar e mapear as empresas.
-	Result := TObjectList<TEmpresa>.Create(True);
+    Result := TObjectList<TEmpresa>.Create(True);
+
+    Q := TFDQuery.Create(nil);
+    Q.Connection := FConnection;
+    try
+      Q.Open('SELECT * FROM EMPRESA');
+
+      if Q.IsEmpty then Exit;
+
+      Q.First;
+      while not Q.Eof do
+      begin
+        E := TEmpresaModel.Create;
+        TEmpresaMapper.FromDataSet(Q, E);
+        Result.Add(E);
+        Q.Next;
+      end;
+    finally
+      FreeAndNil(Q);
+    end;
 end;
 
 procedure TEmpresaRepository.Gravar(const AEmpresa: TEmpresa);
+var
+    Q: TFDQuery;
 begin
-	// TODO: inserir a empresa no banco de dados.
-end;
+	Q := TFDQuery.Create(nil);
+    Q.Connection := FConnection;
+    try
+        Q.Open('SELECT * FROM EMPRESA WHERE CD_EMPRESA = :C', [AEmpresa.Codigo]);
 
-procedure TEmpresaRepository.Atualizar(const AEmpresa: TEmpresa);
-begin
-	// TODO: atualizar a empresa no banco de dados.
+        if Q.IsEmpty then Q.Append
+        else Q.Edit;
+
+        TEmpresaMapper.FromModel(AEmpresa, Q);
+
+        Q.Post;
+    finally
+        FreeAndNil(Q);
+    end;
 end;
 
 procedure TEmpresaRepository.Excluir(AId: Integer);
+var
+    Q: TFDQuery;
 begin
-	// TODO: excluir a empresa correspondente.
+	Q := TFDQuery.Create(nil);
+    Q.Connection := FConnection;
+    try
+        Q.ExecSQL('DELETE FROM EMPRESA WHERE CD_EMPRESA = :C', [AId]);
+    finally
+        FreeAndNil(Q);
+    end;
 end;
 
 end.
