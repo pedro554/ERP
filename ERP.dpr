@@ -14,10 +14,13 @@ uses
   Login.Repository in 'src\repository\Login.Repository.pas',
   Utils in 'src\common\Utils.pas',
   MyEdit in 'src\components\MyEdit.pas',
-  MyLabel in 'src\components\MyLabel.pas';
+  MyLabel in 'src\components\MyLabel.pas',
+  MenuPrincipal.View in 'src\view\MenuPrincipal.View.pas';
 
 var
   FrmLogin: TLoginView;
+  FMenuPrincipal: TMenuPrincipalView;
+  Ok: Boolean;
 
 begin
   ReportMemoryLeaksOnShutdown := True;
@@ -26,9 +29,19 @@ begin
   
   FrmLogin := TLoginView.Create(nil);
   try
-    FrmLogin.ShowModal;
+    Ok := FrmLogin.ShowModal = 1;
   finally
     FrmLogin.Free;
+  end;
+
+  if Ok then
+  begin
+    FMenuPrincipal := TMenuPrincipalView.Create(nil);
+    try
+      FMenuPrincipal.ShowModal;
+    finally
+      FreeAndNil(FMenuPrincipal);
+    end;
   end;
 
   Application.Run;
