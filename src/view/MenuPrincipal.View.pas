@@ -25,8 +25,10 @@ type
         MenuCadastroEmpresa: TMenuItem;
         MenuCadastroFilial: TMenuItem;
         MenuCadastroCliente: TMenuItem;
+        MenuSair: TMenuItem;
 
         function CriaMenuItem(ACaption: String): TMenuItem;
+        procedure MenuSairClick(Sender: TObject);
     public
         constructor Create(AOwner: TComponent); override;
         destructor Destroy; override;
@@ -53,7 +55,11 @@ begin
     MenuCadastros.Add(CriaMenuItem('-'));
     MenuCadastros.Add(MenuCadastroCliente);
 
+    MenuSair := CriaMenuItem('Sair');
+    MenuSair.OnClick := MenuSairClick;
+
     MainMenu.Items.Add(MenuCadastros);
+    MainMenu.Items.Add(MenuSair);
 
     Self.Menu := MainMenu;
 end;
@@ -67,6 +73,11 @@ function TMenuPrincipalView.CriaMenuItem(ACaption: String): TMenuItem;
 begin
   Result := TMenuItem.Create(MainMenu);
   Result.Caption := ACaption;
+end;
+
+procedure TMenuPrincipalView.MenuSairClick(Sender: TObject);
+begin
+  ModalResult := mrCancel;
 end;
 
 end.
