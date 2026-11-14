@@ -6,7 +6,8 @@ uses
 	System.Generics.Collections,
 	FireDAC.Comp.Client,
 	Empresa.Model,
-    Empresa.Mapper;
+    Empresa.Mapper,
+    Data.DB;
 
 type
 	TEmpresaRepository = class
@@ -15,9 +16,9 @@ type
 	public
 		constructor Create(AConnection: TFDConnection);
 
-		function BuscarPorId(AId: Integer): TEmpresa;
-		function Listar: TObjectList<TEmpresa>;
-		procedure Gravar(const AEmpresa: TEmpresa);
+		function BuscarPorId(AId: Integer): TEmpresaModel;
+		function Listar: TObjectList<TEmpresaModel>;
+		procedure Gravar(const AEmpresa: TEmpresaModel);
 		procedure Excluir(AId: Integer);
 	end;
 
@@ -35,7 +36,7 @@ begin
 	FConnection := AConnection;
 end;
 
-function TEmpresaRepository.BuscarPorId(AId: Integer): TEmpresa;
+function TEmpresaRepository.BuscarPorId(AId: Integer): TEmpresaModel;
 var
     Q: TFDQuery;
 begin
@@ -55,12 +56,12 @@ begin
     end;
 end;
 
-function TEmpresaRepository.Listar: TObjectList<TEmpresa>;
+function TEmpresaRepository.Listar: TObjectList<TEmpresaModel>;
 var
     Q: TFDQuery;
     E: TEmpresaModel;
 begin
-    Result := TObjectList<TEmpresa>.Create(True);
+    Result := TObjectList<TEmpresaModel>.Create(True);
 
     Q := TFDQuery.Create(nil);
     Q.Connection := FConnection;
@@ -82,7 +83,7 @@ begin
     end;
 end;
 
-procedure TEmpresaRepository.Gravar(const AEmpresa: TEmpresa);
+procedure TEmpresaRepository.Gravar(const AEmpresa: TEmpresaModel);
 var
     Q: TFDQuery;
 begin
@@ -91,7 +92,11 @@ begin
     try
         Q.Open('SELECT * FROM EMPRESA WHERE CD_EMPRESA = :C', [AEmpresa.Codigo]);
 
-        if Q.IsEmpty then Q.Append
+        if Q.IsEmpty then 
+        begin
+            Q.Append;
+            AEmpresa.DataCadastro := Now;
+        end
         else Q.Edit;
 
         TEmpresaMapper.FromModel(AEmpresa, Q);

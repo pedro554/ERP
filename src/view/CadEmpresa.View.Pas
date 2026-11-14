@@ -4,7 +4,10 @@ interface
 
 uses
 	Vcl.Forms, MyLabel, MyCheckBox, MyEdit, MyMemo, System.SysUtils, System.Classes,
-    MyPanel, Vcl.Controls, MyButton;
+    MyPanel, Vcl.Controls, MyButton, Empresa.Service, Empresa.Model, Firedac.Comp.Client, 
+    Firedac.Stan.Def, Firedac.Stan.Async, Firedac.DApt, Firedac.Phys.FB, Firedac.Phys.FBDef,
+    Firedac.Phys, Firedac.Stan.Intf, Firedac.Stan.Option, Firedac.Stan.Error, Firedac.UI.Intf, 
+    Firedac.VCLUI.Wait, Firedac.Comp.UI, Conexao;
 
 type
 	TCadEmpresaView = class(TForm)
@@ -12,8 +15,6 @@ type
         lblNome: TMyLabel;
         edtNome: TMyEdit;
         chkAtivo: TMyCheckBox;
-        lblObs: TMyLabel;
-        memObs: TMyMemo;
         pnlBotoes: TMyPanel;
         btnCancelar: TMyButton;
         btnGravar: TMyButton;
@@ -32,7 +33,7 @@ begin
     inherited CreateNew(AOwner);
     Self.Caption := 'Cadastro da Empresa';
     Self.Width := 550; 
-    Self.Height := 300;
+    Self.Height := 200;
     Self.Position := poScreenCenter;
 
     lblNome := TMyLabel.Create(Self);
@@ -52,18 +53,6 @@ begin
     chkAtivo.Left := lblNome.Left;
     chkAtivo.Caption := 'Ativo';
     chkAtivo.Parent := Self;
-
-    lblObs := TMyLabel.Create(Self);
-    lblObs.Top := 80;
-    lblObs.Left := lblNome.Left;
-    lblObs.Caption := 'Observação';
-    lblObs.Parent := Self;
-
-    memObs := TMyMemo.Create(Self);
-    memObs.Top := lblObs.Top + 20;
-    memObs.Left := lblObs.Left;
-    memObs.Parent := Self;
-    memObs.Width := 500;
 
     pnlBotoes := TMyPanel.Create(Self);
     pnlBotoes.Parent := Self;
@@ -95,8 +84,36 @@ begin
 end;
 
 procedure TCadEmpresaView.Gravar(Sender: TObject);
+var
+    Empresa: TEmpresaModel;
+    Service: TEmpresaService;
+    Conn: TFDConnection;
 begin
-  
+    Conn := TConexao.Conexao(nil);
+    Empresa := TEmpresaModel.Create;
+    Service := TEmpresaService.Create(Conn);
+    try
+        Empresa.Codigo := 1; // pegar da sequencia
+        Empresa.Nome := edtNome.Text;
+        Empresa.Ativo := chkAtivo.Checked;
+
+        Conn.Transaction.StartTransaction;
+        try
+            Service.Gravar(Empresa);
+            Conn.Transaction.Commit;
+            ModalResult := mrOk;
+        except
+          on E: Exception do
+          begin
+            Conn.Transaction.Rollback;
+            raise Exception.Create('Falha ao gravar empresa: ' + e.Message);
+          end;
+        end;
+    finally
+        FreeAndNil(Empresa);
+        FreeAndNil(Service);
+        FreeAndNil(Conn);
+    end;
 end;
 
 end.

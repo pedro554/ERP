@@ -20,7 +20,6 @@ begin
 	AEmpresa.Codigo := ADataSet.FieldByName('CD_EMPRESA').AsInteger;
 	AEmpresa.Ativo := ADataSet.FieldByName('ST_ATIVO').AsBoolean;
 	AEmpresa.Nome := ADataSet.FieldByName('NM_EMPRESA').AsString;
-    AEmpresa.Observacao := ADataSet.FieldByName('DS_OBSERVACAO').AsString;
 
 	if (not ADataSet.FieldByName('DT_CADASTRO').IsNull) or 
     (ADataSet.FieldByName('DT_CADASTRO').AsDateTime > 0) then
@@ -32,7 +31,6 @@ begin
 	ADataSet.FieldByName('CD_EMPRESA').AsInteger := AModel.Codigo;
 	ADataSet.FieldByName('ST_ATIVO').AsBoolean := AModel.Ativo;
 	ADataSet.FieldByName('NM_EMPRESA').AsString := AModel.Nome;
-	ADataSet.FieldByName('DS_OBSERVACAO').AsString := AModel.Observacao;
 	ADataSet.FieldByName('DT_CADASTRO').AsDateTime := AModel.DataCadastro;
 end;
 
