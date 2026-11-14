@@ -11,6 +11,7 @@ type
 	TConexao = class
 	private
         class var FConexao: TFDConnection;
+        class var FTransaction: TFDTransaction;
         class var FDriver: TFDPhysFBDriverLink;
         class procedure ConfigurarConexao;
         class procedure ConfigurarDriver;
@@ -24,7 +25,9 @@ implementation
 class function TConexao.Conexao(AOwner: TComponent): TFDConnection;
 begin
     FConexao := TFDConnection.Create(AOwner);
-    FDriver := TFDPhysFBDriverLink.Create(AOwner);
+    FTransaction := TFDTransaction.Create(FConexao);
+    FConexao.Transaction := FTransaction;
+    FDriver := TFDPhysFBDriverLink.Create(FConexao);
 
     ConfigurarConexao;
     ConfigurarDriver;
