@@ -5,6 +5,12 @@ program ERP;
 uses
   Vcl.Forms,
   System.SysUtils,
+  // Comum
+  Conexao in 'src\config\Conexao.pas',
+  Session in 'src\config\Session.pas',
+  Utils in 'src\common\Utils.pas',
+  Constantes in 'src\common\Constantes.pas',
+
   // componentes
   MyEdit in 'src\components\MyEdit.pas',
   MyLabel in 'src\components\MyLabel.pas',
@@ -12,6 +18,8 @@ uses
   MyMemo in 'src\components\MyMemo.pas',
   MyPanel in 'src\components\MyPanel.pas',
   MyButton in 'src\components\MyButton.pas',
+  MyComboBox in 'src\components\MyComboBox.pas',
+  MyGrid in 'src\components\MyGrid.pas',
 
   // Models
   Usuario.Model in 'src\model\Usuario.Model.pas',
@@ -27,14 +35,13 @@ uses
   
   // Service
   Empresa.Service in 'src\service\Empresa.Service.pas',
-
-  Login.View in 'src\view\Login.View.pas',
-  Conexao in 'src\config\Conexao.pas',
   Login.Service in 'src\service\Login.Service.pas',
-  Session in 'src\config\Session.pas',
-  Utils in 'src\common\Utils.pas',
+
+  // Views
+  Login.View in 'src\view\Login.View.pas',
   MenuPrincipal.View in 'src\view\MenuPrincipal.View.pas',
-  CadEmpresa.View in 'src\view\CadEmpresa.View.pas';
+  CadEmpresa.View in 'src\view\CadEmpresa.View.pas',
+  GerencialBase.View in 'src\view\GerencialBase.View.pas';
 
 var
   FrmLogin: TLoginView;

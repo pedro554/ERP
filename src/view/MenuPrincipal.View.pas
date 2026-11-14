@@ -16,7 +16,8 @@ uses
     MyEdit,
     MyLabel,
     Vcl.Menus,
-    CadEmpresa.View;
+    CadEmpresa.View,
+    GerencialBase.View;
 
 type
 	TMenuPrincipalView = class(TForm)
@@ -27,10 +28,12 @@ type
         MenuCadastroFilial: TMenuItem;
         MenuCadastroCliente: TMenuItem;
         MenuSair: TMenuItem;
+        MenuTeste: TMenuItem;
 
         function CriaMenuItem(ACaption: String): TMenuItem;
         procedure MenuSairClick(Sender: TObject);
         procedure MenuCadastroEmpresaClick(Sender: TObject);
+        procedure MenuTesteClick(Sender: TObject);
     public
         constructor Create(AOwner: TComponent); override;
         destructor Destroy; override;
@@ -64,9 +67,13 @@ begin
     MenuSair := CriaMenuItem('Sair');
     MenuSair.OnClick := MenuSairClick;
 
+    MenuTeste := CriaMenuItem('Teste');
+    MenuTeste.OnClick := MenuTesteClick;
+
     // adiciona os itens ao menu
     MainMenu.Items.Add(MenuCadastros);
     MainMenu.Items.Add(MenuSair);
+    MainMenu.Items.Add(MenuTeste);
 
     Self.Menu := MainMenu;
 end;
@@ -96,6 +103,18 @@ begin
       LCadEmpresaView.ShowModal;
     finally
       FreeAndNil(LCadEmpresaView);
+    end;
+end;
+
+procedure TMenuPrincipalView.MenuTesteClick(Sender: TObject);
+var
+    Teste: TGerencialBaseView;
+begin
+    Teste := TGerencialBaseView.Create(nil);
+    try
+        Teste.ShowModal;
+    finally
+        FreeAndNil(Teste);
     end;
 end;
 
